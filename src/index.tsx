@@ -1,12 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import { renderRoutes } from 'react-router-config';
+import { Router } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+import { Provider as StoreProvider } from 'react-redux';
+import { ThemeProvider } from '@material-ui/styles';
+import MomentUtils from '@date-io/moment';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import store from './redux/store';
+import routes from './routes';
+import theme from './theme';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const history = createBrowserHistory();
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
+ReactDOM.render(
+    <StoreProvider store={store}>
+        <ThemeProvider theme={theme}>
+            <MuiPickersUtilsProvider utils={MomentUtils}>
+                <Router history={history}>
+                    {renderRoutes(routes)}
+                </Router>
+            </MuiPickersUtilsProvider>
+        </ThemeProvider>
+    </StoreProvider>,
+    document.querySelectorAll('.app')[0]
+);
+
